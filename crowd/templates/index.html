@@ -2,11 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crowd Monitoring Dashboard</title>
     <link rel="stylesheet" href="/static/style.css">
+    <script>
+        async function loadDensity() {
+            const response = await fetch('/get_density');
+            const data = await response.json();
+            const densityDiv = document.getElementById('density');
+            densityDiv.innerHTML = data.locations.map(loc =>
+                `<p>Location: ${loc.name}, Density: ${loc.density}, People: ${loc.people}</p>`
+            ).join('');
+        }
+        setInterval(loadDensity, 5000);  // Refresh every 5 seconds
+    </script>
 </head>
 <body>
     <h1>Crowd Monitoring Dashboard</h1>
+
+    <h2>Live Video Feed</h2>
+    <img src="/video_feed" alt="Live Feed" id="camera-feed">
+
+    <h2>Density Logs</h2>
     <div id="density">Loading density data...</div>
 </body>
 </html>
